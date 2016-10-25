@@ -262,9 +262,14 @@
                 try {
                     readRules(document.styleSheets[i].cssRules || document.styleSheets[i].cssText || document.styleSheets[i].rules);
                 } catch(e) {
-                    if (e.name !== 'SecurityError') {
-                        if (e.name === 'SyntaxError') {
-                            throw 'comma seperated css rules not allowed in IE ' + e.name;
+                    var name = e.name;
+                    var description = e.description || '';
+
+                    if (name !== 'SecurityError'
+                        && name !== 'InvalidAccessError'
+                        && description.indexOf('Access is denied') === -1) {
+                        if (name === 'SyntaxError') {
+                            throw 'comma seperated css rules not allowed in IE ' + name;
                         } else {
                             throw e;
                         }
